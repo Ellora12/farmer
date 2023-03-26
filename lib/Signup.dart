@@ -1,5 +1,7 @@
 import 'package:farmer/Login.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Signup extends StatefulWidget {
   @override
@@ -7,6 +9,27 @@ class Signup extends StatefulWidget {
 }
 
 class InitState extends State<Signup> {
+
+  //My code Portion--Arnab
+  // final _formkey =GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final phoneController =TextEditingController();
+  final fullnameController =TextEditingController();
+
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void dispose() {
+
+    super.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passwordController.dispose();
+    fullnameController.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) => initWidget();
 
@@ -75,7 +98,9 @@ class InitState extends State<Signup> {
               hintText: "Full Name",
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
+
             ),
+            controller: fullnameController,
           ),
         ),
         Container(
@@ -104,6 +129,7 @@ class InitState extends State<Signup> {
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
             ),
+            controller: emailController,
           ),
         ),
         Container(
@@ -133,6 +159,7 @@ class InitState extends State<Signup> {
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
             ),
+            controller: phoneController,
           ),
         ),
         Container(
@@ -162,19 +189,48 @@ class InitState extends State<Signup> {
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
             ),
+            controller: passwordController,
           ),
         ),
         GestureDetector(
           onTap: () {
             // Write Click Listener Code Here.
+            print("gesture is clicked");
           },
           child: InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Login(),
-                  ));
+
+              // My codeing Part-->Arnab
+              var pass=passwordController.text.toString();
+              var name=fullnameController.text.toString();
+              var phn_no=phoneController.text.toString();
+              var em=emailController.text.toString();
+
+              if(phn_no.length!=11 && name != null && pass!=null && em!=null)
+              {
+                print("It is working2");
+               _auth.createUserWithEmailAndPassword(
+                   email: emailController.text.toString(),
+                   password: passwordController.text.toString());
+
+               Navigator.push(
+                   context,
+                   MaterialPageRoute(
+                     builder: (context) => Login(),
+                   ));
+
+               }
+
+
+            else {
+                print("It is working");
+
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Signup(),
+                    ));
+              }
             },
             child: Container(
               alignment: Alignment.center,
