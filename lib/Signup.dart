@@ -206,7 +206,7 @@ class InitState extends State<Signup> {
               var phn_no=phoneController.text.toString();
               var em=emailController.text.toString();
 
-              if(phn_no.length!=11 && name != null && pass!=null && em!=null)
+              if(phn_no.length!=null && name != null && pass!=null && em!=null)
               {
                 print("It is working2");
                _auth.createUserWithEmailAndPassword(
