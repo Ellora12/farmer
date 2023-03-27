@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 elevation: 3,
                 child: ListTile(
                   title: Text(
-                    "Crop Nmae sugarcane",
+                    "Crop Name sugarcane",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                   ),
                   subtitle: Text("01/08/2022"),
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 elevation: 3,
                 child: ListTile(
                   title: Text(
-                    "Crop Nmae Tea",
+                    "Crop Name Tea",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                   ),
                   subtitle: Text("03/02/2022"),
@@ -130,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 elevation: 3,
                 child: ListTile(
                   title: Text(
-                    "Crop Nmae  millets",
+                    "Crop Name  millets",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                   ),
                   subtitle: Text("05/5/2022"),
