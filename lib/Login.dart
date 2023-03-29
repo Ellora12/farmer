@@ -114,7 +114,7 @@ class StartState extends State<Login> {
                             margin: EdgeInsets.only(
                                 left: 20, right: 20, top: 70),
                             padding: EdgeInsets.only(left: 20, right: 20),
-                            height: 54,
+                            height: 70, //54
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
                               color: Colors.grey[200],
@@ -144,7 +144,7 @@ class StartState extends State<Login> {
                             margin: EdgeInsets.only(
                                 left: 20, right: 20, top: 20),
                             padding: EdgeInsets.only(left: 20, right: 20),
-                            height: 54,
+                            height: 70, //54
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
                               color: Color(0xff98BB9EFF),

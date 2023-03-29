@@ -120,7 +120,7 @@ class InitState extends State<Signup> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 70),
                   padding: EdgeInsets.only(left: 20, right: 20),
-                  height: 54,
+                  height: 70, //54
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Colors.grey[200],
@@ -138,7 +138,8 @@ class InitState extends State<Signup> {
                         hintText: 'Full Name',
                         prefixIcon: Icon(Icons.alternate_email)),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value!.isEmpty ||
+                          !RegExp(r'^[a-z A-Z]+$').hasMatch(value!)) {
                         return 'Enter your Name';
                       }
                       return null;
@@ -149,7 +150,7 @@ class InitState extends State<Signup> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 20),
                   padding: EdgeInsets.only(left: 20, right: 20),
-                  height: 54,
+                  height: 70, //54
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Colors.grey[200],
@@ -167,7 +168,9 @@ class InitState extends State<Signup> {
                         hintText: 'Email',
                         prefixIcon: Icon(Icons.alternate_email)),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value!.isEmpty ||
+                          !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$')
+                              .hasMatch(value!)) {
                         return 'Enter email';
                       }
                       return null;
@@ -178,7 +181,7 @@ class InitState extends State<Signup> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 20),
                   padding: EdgeInsets.only(left: 20, right: 20),
-                  height: 54,
+                  height: 70, //54
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Color(0xffEEEEEE),
@@ -197,7 +200,9 @@ class InitState extends State<Signup> {
                         hintText: 'PhoneNo',
                         prefixIcon: Icon(Icons.phone_callback)),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value!.isEmpty ||
+                          !RegExp(r'^(?:\+88|88)?(01[3-9]\d{8})$')
+                              .hasMatch(value!)) {
                         return 'Enter your Phone Number';
                       }
                       return null;
@@ -208,7 +213,7 @@ class InitState extends State<Signup> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 20),
                   padding: EdgeInsets.only(left: 20, right: 20),
-                  height: 54,
+                  height: 70, //54
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Color(0xffEEEEEE),
@@ -237,7 +242,7 @@ class InitState extends State<Signup> {
               ],
             )),
         RoundButton(
-          title: 'Signuo',
+          title: 'Signup',
           loading: loading,
           onTap: () {
             if (_formKey.currentState!.validate()) {
