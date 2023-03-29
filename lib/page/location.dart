@@ -1,15 +1,16 @@
+import 'dart:async';
+import 'dart:math' as Math;
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
-void main() => runApp(CustomMarkerInfoWindowScreen());
-
-
-class CustomMarkerInfoWindowScreen extends StatefulWidget {
+class MapSample extends StatefulWidget {
   @override
-  State<CustomMarkerInfoWindowScreen> createState() => _MyAppState();
+  State<MapSample> createState() => MapSampleState();
 }
 
-class _MyAppState extends State<CustomMarkerInfoWindowScreen> {
+class MapSampleState extends State<MapSample> {
   Completer<GoogleMapController> _controller = Completer();
   static const LatLng _center = const LatLng(45.521563, -122.677433);
   final Set<Marker> _markers = {};
