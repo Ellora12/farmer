@@ -10,6 +10,8 @@ import 'package:farmer/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:farmer/page/user_page.dart';
 
+import '../uploadimage.dart';
+
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
   @override
