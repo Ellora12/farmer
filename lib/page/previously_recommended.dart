@@ -21,7 +21,7 @@ class previously extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Previous list of fertilizers'),
+      home: const MyHomePage(title: 'Previous list of Pests'),
     );
   }
 }
@@ -68,11 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Container(
               child: Card(
-                color: Colors.white60,
+                color: Colors.redAccent,
                 elevation: 3,
                 child: ListTile(
                   title: Text(
-                    "Crop Name sugarcane",
+                    "pest name Cotton bollworm",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                   ),
                   subtitle: Text("01/08/2022"),
@@ -97,11 +97,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Container(
               child: Card(
-                color: Colors.white60,
+                color: Colors.greenAccent,
                 elevation: 3,
                 child: ListTile(
                   title: Text(
-                    "Crop Name Tea",
+                    "pest name Tobacco whitefly",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                   ),
                   subtitle: Text("03/02/2022"),
@@ -126,11 +126,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Container(
               child: Card(
-                color: Colors.white60,
+                color: Colors.greenAccent,
                 elevation: 3,
                 child: ListTile(
                   title: Text(
-                    "Crop Name  millets",
+                    "pest name  Diamondback moth",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                   ),
                   subtitle: Text("05/5/2022"),
@@ -155,11 +155,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Container(
               child: Card(
-                color: Colors.white60,
+                color: Colors.greenAccent,
                 elevation: 3,
                 child: ListTile(
                   title: Text(
-                    "Crop Name wheat",
+                    "pest name Red flour beetle",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                   ),
                   subtitle: Text("21/05/2022"),
