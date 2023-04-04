@@ -45,7 +45,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Fertilizer Recommendation',
+                    text: 'Pest Detection',
                     icon: Icons.recommend,
                     onClicked: () => selectedItem(context, 1),
                   ),
@@ -145,7 +145,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => fertilizer(),
+          builder: (context) => UploadImageScreen(),
         ));
         break;
       case 2:
