@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:farmer/page/previously_recommended.dart';
 import 'package:farmer/page/recommend.dart';
+import 'package:farmer/profile.dart';
+import 'constants.dart' as globals;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,6 @@ class UploadImageScreen extends StatefulWidget {
 
 class _UploadImageScreenState extends State<UploadImageScreen> {
   bool loading = false;
-  final imagename = TextEditingController();
   File? _image;
   final picker = ImagePicker();
 
@@ -30,7 +31,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
 
   Future getImageGallery() async {
     final pickedFile =
-        await picker.pickImage(source: ImageSource.camera, imageQuality: 100);
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
@@ -75,19 +76,6 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                 SizedBox(
                   height: 15,
                 ),
-                TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: imagename,
-                  decoration: const InputDecoration(
-                      hintText: 'Image Name',
-                      prefixIcon: Icon(Icons.near_me_rounded)),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Enter your Name';
-                    }
-                    return null;
-                  },
-                ),
                 RoundButton(
                     title: 'Upload',
                     loading: loading,
@@ -106,11 +94,8 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                       Future.value(uploadTask).then((value) async {
                         var newUrl = await ref.getDownloadURL();
 
-                        databaseRef.child(now).set({
-                          'name': imagename.text.toString(),
-                          'value': newUrl.toString(),
-                          'type': '',
-                          'suggestion': ''
+                        databaseRef.child(globals.my).set({
+                          'pro': newUrl.toString(),
                         }).then((value) {
                           setState(() {
                             loading = false;
@@ -118,8 +103,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                           Utils().toastMessage('uploaded');
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => recommend()),
+                            MaterialPageRoute(builder: (context) => Profile()),
                           );
                         }).onError((error, stackTrace) {
                           print(error.toString());
@@ -134,32 +118,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                         });
                       });
                     }),
-                SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  color: Colors.blue,
-                  child: Card(
-                    elevation: 3,
-                    child: ListTile(
-                      title: Text(
-                        "Previous Recommendations",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.blueGrey),
-                      ),
-                      subtitle: Text("last used 01/08/2022"),
-                      trailing: Icon(Icons.label_important_outlined),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => previously()),
-                        );
-                      },
-                    ),
-                  ),
-                ),
+                SizedBox(height: 50),
               ],
             ),
           ),

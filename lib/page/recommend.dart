@@ -24,7 +24,7 @@ class recommend extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Necessary Information of the pesticides'),
+      home: const MyHomePage(title: 'Required list of fertilizers'),
     );
   }
 }
@@ -58,7 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Colors.green),
       body: SingleChildScrollView(
         child: Container(
-          height: 1000,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [(new Color(0xffffffff)), new Color(0xff00f25f)],
@@ -72,38 +71,48 @@ class _MyHomePageState extends State<MyHomePage> {
                 dimension: 10,
               ),
               Center(
-                  child: Container(
-                height: 220,
-                width: 340,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  image: DecorationImage(
-                      opacity: 0.9,
-                      image: NetworkImage(
-                          "https://cdn.britannica.com/18/139418-050-03B7A1F4/Larvae-potato-beetle-feeding-leaves-Colorado.jpg"),
-                      fit: BoxFit.cover),
+                child: Text(
+                  "Field Info",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                 ),
-              )),
+              ),
               Divider(
                 color: Colors.white10,
                 height: 10.0,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                child: buildTextField("Type", "Harmful", 1),
+                child: buildTextField("Field Area", "120 meter square"),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                child: buildTextField(
-                    "Suggestion",
-                    "pest name is BRITANICA. \n\n1.Collect the plant you want to use, let it dry, and grind the dried plant to a powder"
-                        "\n\n2.Soak the powder in water overnight (1 handful of powder to 1 liter of water)."
-                        "\n\n3.Pour the mixture through a screen or cloth to remove solids. "
-                        "\n\n4.Add a little bit of mild soap to help the pesticide stick to plants."
-                        "\n\n5.Spray or sprinkle the mixture on plants.Test your mixture on 1 or 2 plants first. If it seems to hurt the plants, it may be too strong."
-                        " Add more water and test it until it seems good."
-                        "\n\n6.Repeat as needed, and after it rains",
-                    20),
+                child: buildTextField("Crop Name", "Rice"),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                child: buildTextField("NPK Value", "12.2,2.2,1.2"),
+              ),
+              Center(
+                child: Text(
+                  "Fertilizer info",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                child: buildTextField("Fertilizer1", "32g/sq m"),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                child: buildTextField("Fertilizer2", "12g/sq m"),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                child: buildTextField("Fertilizer3", "30g/sq m"),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                child: buildTextField("Total Cost", "1200/="),
               ),
             ],
           ),
@@ -113,22 +122,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-Widget buildTextField(String labelText, String placeholder, int n) {
+Widget buildTextField(String labelText, String placeholder) {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 10.0),
-    child: TextFormField(
-      maxLines: n,
+    padding: const EdgeInsets.only(bottom: 35.0),
+    child: TextField(
       decoration: InputDecoration(
           contentPadding: EdgeInsets.only(bottom: 3),
           labelText: labelText,
-          labelStyle: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           hintText: placeholder,
           hintStyle: TextStyle(
-            fontSize: 15,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.black54,
+            color: Colors.black,
           )),
     ),
   );

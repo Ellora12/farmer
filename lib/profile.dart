@@ -1,4 +1,7 @@
+import 'package:farmer/uploadimage.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'constants.dart' as globals;
 
 class Profile extends StatelessWidget {
   @override
@@ -16,7 +19,29 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  String _imageUrl = " ";
   bool showPassword = false;
+  String ee = globals.my;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  String getImageUrl() {
+    final dbRef = FirebaseDatabase.instance.ref().child("Username/name/$ee");
+    dbRef.onValue.listen((event) => {
+          event.snapshot.children.forEach((child) {
+            if (child.key == "pro") {
+              setState(() {
+                _imageUrl = child.value.toString();
+              });
+            }
+          })
+        });
+    return _imageUrl;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,12 +94,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+                                getImageUrl(),
+                                // "https://firebasestorage.googleapis.com/v0/b/farmer-d42ef.appspot.com/o/abrar%2F1681280009080?alt=media&token=c460efe8-c797-418a-9b76-4db56f118e4a"
                               ))),
                     ),
                     Positioned(
-                        bottom: 0,
-                        right: 0,
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          // Add your logic here for what should happen when the container is tapped
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UploadImageScreen()),
+                          );
+                        },
                         child: Container(
                           height: 40,
                           width: 40,
@@ -90,7 +125,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             Icons.edit,
                             color: Colors.white,
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

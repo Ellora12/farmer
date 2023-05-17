@@ -1,4 +1,4 @@
-import 'package:farmer/uploadimage.dart';
+import 'package:farmer/page/fertilizer.dart';
 import 'package:farmer/widget/navigation_drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -100,7 +100,10 @@ class GridDashboard extends StatelessWidget {
       title: "Weather Forcast", event: "", img: "assests/wt.jpg", x: 0);
 
   Items item2 = new Items(
-      title: "Pest Detection", event: "", img: "assests/fartilizer.png", x: 1);
+      title: "Fertilizer Recommendation",
+      event: "",
+      img: "assests/fartilizer.png",
+      x: 1);
   Items item3 = new Items(
       title: "Agriculture Office",
       event: "",
@@ -187,7 +190,7 @@ void selectedItem(BuildContext context, int index) {
       break;
     case 1:
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => UploadImageScreen(),
+        builder: (context) => fertilizer(),
       ));
       break;
     case 2:

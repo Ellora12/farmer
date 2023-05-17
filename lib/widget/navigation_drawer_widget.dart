@@ -1,8 +1,6 @@
 import 'package:farmer/landingpage.dart';
 import 'package:farmer/page/addcrop.dart';
 import 'package:farmer/page/fertilizer.dart';
-import 'package:farmer/page/irrigationc.dart';
-import 'package:farmer/page/irrigationh.dart';
 import 'package:farmer/page/irrselect.dart';
 import 'package:farmer/page/location.dart';
 import 'package:farmer/page/weather.dart';
@@ -45,7 +43,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Pest Detection',
+                    text: 'Fertilizer Recommendation',
                     icon: Icons.recommend,
                     onClicked: () => selectedItem(context, 1),
                   ),
@@ -145,7 +143,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => UploadImageScreen(),
+          builder: (context) => fertilizer(),
         ));
         break;
       case 2:

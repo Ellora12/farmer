@@ -1,11 +1,14 @@
 import 'package:farmer/Login.dart';
 import 'package:farmer/utils/utils.dart';
+import 'constants.dart' as globals;
 import 'package:farmer/widget/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import 'Dashboard.dart';
+
+String myString = "Hello, world!";
 
 class Signup extends StatefulWidget {
   @override
@@ -38,6 +41,12 @@ class InitState extends State<Signup> {
     var phn_no = phoneController.text.toString();
     var em = emailController.text.toString();
     var pass = passwordController.text.toString();
+    List<String> emailParts = em.split('@');
+
+    setState(() {
+      globals.my = emailParts[0];
+      ;
+    });
 
     setState(() {
       loading = true;
@@ -49,7 +58,7 @@ class InitState extends State<Signup> {
               email: emailController.text.toString(),
               password: passwordController.text.toString())
           .then((value) {
-        databaseRef.child(phn_no).set(
+        databaseRef.child(emailParts[0]).set(
             {'name': name, 'email': em, 'password': pass, 'PhoneNo': phn_no});
         setState(() {
           loading = false;
@@ -120,7 +129,7 @@ class InitState extends State<Signup> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 70),
                   padding: EdgeInsets.only(left: 20, right: 20),
-                  height: 70, //54
+                  height: 54,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Colors.grey[200],
@@ -138,8 +147,7 @@ class InitState extends State<Signup> {
                         hintText: 'Full Name',
                         prefixIcon: Icon(Icons.alternate_email)),
                     validator: (value) {
-                      if (value!.isEmpty ||
-                          !RegExp(r'^[a-z A-Z]+$').hasMatch(value!)) {
+                      if (value!.isEmpty) {
                         return 'Enter your Name';
                       }
                       return null;
@@ -150,7 +158,7 @@ class InitState extends State<Signup> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 20),
                   padding: EdgeInsets.only(left: 20, right: 20),
-                  height: 70, //54
+                  height: 54,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Colors.grey[200],
@@ -168,9 +176,7 @@ class InitState extends State<Signup> {
                         hintText: 'Email',
                         prefixIcon: Icon(Icons.alternate_email)),
                     validator: (value) {
-                      if (value!.isEmpty ||
-                          !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$')
-                              .hasMatch(value!)) {
+                      if (value!.isEmpty) {
                         return 'Enter email';
                       }
                       return null;
@@ -181,7 +187,7 @@ class InitState extends State<Signup> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 20),
                   padding: EdgeInsets.only(left: 20, right: 20),
-                  height: 70, //54
+                  height: 54,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Color(0xffEEEEEE),
@@ -200,9 +206,7 @@ class InitState extends State<Signup> {
                         hintText: 'PhoneNo',
                         prefixIcon: Icon(Icons.phone_callback)),
                     validator: (value) {
-                      if (value!.isEmpty ||
-                          !RegExp(r'^(?:\+88|88)?(01[3-9]\d{8})$')
-                              .hasMatch(value!)) {
+                      if (value!.isEmpty) {
                         return 'Enter your Phone Number';
                       }
                       return null;
@@ -213,7 +217,7 @@ class InitState extends State<Signup> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 20),
                   padding: EdgeInsets.only(left: 20, right: 20),
-                  height: 70, //54
+                  height: 54,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Color(0xffEEEEEE),

@@ -57,7 +57,7 @@ class landingpage extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Login(),
+                    builder: (context) => SplashScreen(),
                   ));
             },
             child: Container(

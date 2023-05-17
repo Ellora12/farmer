@@ -1,577 +1,318 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' as parser;
+import 'package:html/dom.dart' as dom;
 import '../widget/navigation_drawer_widget.dart';
-
-void main() => runApp(MaterialApp(home: weather()));
 
 class weather extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _weatherState createState() => _weatherState();
 }
 
-class _HomePageState extends State<weather> {
+class _weatherState extends State<weather> {
+  List<Map<String, String>> hourlyForecastData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final response = await http.get(Uri.parse(
+        'https://www.timeanddate.com/weather/bangladesh/dhaka/hourly'));
+    if (response.statusCode == 200) {
+      final document = parser.parse(response.body);
+      final table =
+      document.getElementById('wt-hbh')?.getElementsByTagName('tbody')[0];
+      final rows = table?.getElementsByTagName('tr');
+      for (final row in rows!) {
+        final columns = row.getElementsByTagName('td');
+        final time = row.getElementsByTagName('th')[0].text.trim();
+
+        final temperature = columns[2].text.trim();
+        final wind = columns[3].text.trim();
+        final humidity = columns[4].text.trim();
+        final chance = columns[5].text.trim();
+        final amount = columns[6].text.trim();
+
+        final forecast = {
+          'Time': time,
+          'Temperature': temperature,
+          'Wind': wind,
+          'Humidity': humidity,
+          'Chance': chance,
+          'Amount': amount,
+        };
+
+        hourlyForecastData.add(forecast);
+      }
+
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    String cityName = "Dhaka"; //city name
-    int currTemp = 30; // current temperature
-    int maxTemp = 30; // today max temperature
-    int minTemp = 2; // today min temperature
-    Size size = MediaQuery.of(context).size;
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
     return Scaffold(
+      backgroundColor: Colors.greenAccent,
       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
-        title: Text('WEATHER FORCAST'),
+        title: Text('Fertilizer Recommendation'),
         centerTitle: true,
         backgroundColor: Colors.green,
       ),
-      body: Center(
-        child: Container(
-          height: size.height,
-          width: size.height,
-          decoration: BoxDecoration(
-            color: isDarkMode ? Colors.black : Colors.white,
-          ),
-          child: SafeArea(
-            child: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView.builder(
+        itemCount: hourlyForecastData.length,
+        itemBuilder: (context, index) {
+          final forecast = hourlyForecastData[index];
+
+          return Card(
+            color: Colors.deepOrange[100],
+            elevation: 4,
+            shadowColor: Colors.grey.withOpacity(0.5),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: BorderSide(
+                color: Colors.grey.withOpacity(0.5),
+                width: 1,
+              ),
+            ),
+            child: ListTile(
+              contentPadding: EdgeInsets.all(16),
+              title: Text(
+                'Time: ${forecast['Time']}',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: size.height * 0.03,
-                        ),
-                        child: Align(
-                          child: Text(
-                            cityName,
-                            style: GoogleFonts.questrial(
-                              color: isDarkMode ? Colors.white : Colors.black,
-                              fontSize: size.height * 0.06,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Temperature',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.orange,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: size.height * 0.005,
-                        ),
-                        child: Align(
-                          child: Text(
-                            'Today', //day
-                            style: GoogleFonts.questrial(
-                              color:
-                                  isDarkMode ? Colors.white54 : Colors.black54,
-                              fontSize: size.height * 0.035,
+                          Text(
+                            '${forecast['Temperature']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.orange,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: size.height * 0.03,
-                        ),
-                        child: Align(
-                          child: Text(
-                            '$currTemp˚C', //curent temperature
-                            style: GoogleFonts.questrial(
-                              color: currTemp <= 0
-                                  ? Colors.blue
-                                  : currTemp > 0 && currTemp <= 15
-                                      ? Colors.indigo
-                                      : currTemp > 15 && currTemp < 30
-                                          ? Colors.deepPurple
-                                          : Colors.pink,
-                              fontSize: size.height * 0.13,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Wind',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.25),
-                        child: Divider(
-                          color: isDarkMode ? Colors.white : Colors.black,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: size.height * 0.005,
-                        ),
-                        child: Align(
-                          child: Text(
-                            'Sunny', // weather
-                            style: GoogleFonts.questrial(
-                              color:
-                                  isDarkMode ? Colors.white54 : Colors.black54,
-                              fontSize: size.height * 0.03,
+                          Text(
+                            '${forecast['Wind']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.green,
                             ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: size.height * 0.03,
-                          bottom: size.height * 0.01,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '$minTemp˚C', // min temperature
-                              style: GoogleFonts.questrial(
-                                color: minTemp <= 0
-                                    ? Colors.blue
-                                    : minTemp > 0 && minTemp <= 15
-                                        ? Colors.indigo
-                                        : minTemp > 15 && minTemp < 30
-                                            ? Colors.deepPurple
-                                            : Colors.pink,
-                                fontSize: size.height * 0.03,
-                              ),
-                            ),
-                            Text(
-                              '/',
-                              style: GoogleFonts.questrial(
-                                color: isDarkMode
-                                    ? Colors.white54
-                                    : Colors.black54,
-                                fontSize: size.height * 0.03,
-                              ),
-                            ),
-                            Text(
-                              '$maxTemp˚C', //max temperature
-                              style: GoogleFonts.questrial(
-                                color: maxTemp <= 0
-                                    ? Colors.blue
-                                    : maxTemp > 0 && maxTemp <= 15
-                                        ? Colors.indigo
-                                        : maxTemp > 15 && maxTemp < 30
-                                            ? Colors.deepPurple
-                                            : Colors.pink,
-                                fontSize: size.height * 0.03,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: size.width * 0.05,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                            color: isDarkMode
-                                ? Colors.white.withOpacity(0.05)
-                                : Colors.black.withOpacity(0.05),
-                          ),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    top: size.height * 0.01,
-                                    left: size.width * 0.03,
-                                  ),
-                                  child: Text(
-                                    'Forecast for today',
-                                    style: GoogleFonts.questrial(
-                                      color: isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontSize: size.height * 0.025,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(size.width * 0.005),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: [
-                                      //TODO: change weather forecast from local to api get
-                                      buildForecastToday(
-                                        "Now", //hour
-                                        currTemp, //temperature
-                                        20, //wind (km/h)
-                                        0, //rain chance (%)
-                                        FontAwesomeIcons.sun, //weather icon
-                                        size,
-                                        isDarkMode,
-                                      ),
-                                      buildForecastToday(
-                                        "15:00",
-                                        1,
-                                        10,
-                                        40,
-                                        FontAwesomeIcons.cloud,
-                                        size,
-                                        isDarkMode,
-                                      ),
-                                      buildForecastToday(
-                                        "16:00",
-                                        0,
-                                        25,
-                                        80,
-                                        FontAwesomeIcons.cloudRain,
-                                        size,
-                                        isDarkMode,
-                                      ),
-                                      buildForecastToday(
-                                        "17:00",
-                                        -2,
-                                        28,
-                                        60,
-                                        FontAwesomeIcons.snowflake,
-                                        size,
-                                        isDarkMode,
-                                      ),
-                                      buildForecastToday(
-                                        "18:00",
-                                        -5,
-                                        13,
-                                        40,
-                                        FontAwesomeIcons.cloudMoon,
-                                        size,
-                                        isDarkMode,
-                                      ),
-                                      buildForecastToday(
-                                        "19:00",
-                                        -8,
-                                        9,
-                                        60,
-                                        FontAwesomeIcons.snowflake,
-                                        size,
-                                        isDarkMode,
-                                      ),
-                                      buildForecastToday(
-                                        "20:00",
-                                        -13,
-                                        25,
-                                        50,
-                                        FontAwesomeIcons.snowflake,
-                                        size,
-                                        isDarkMode,
-                                      ),
-                                      buildForecastToday(
-                                        "21:00",
-                                        -14,
-                                        12,
-                                        40,
-                                        FontAwesomeIcons.cloudMoon,
-                                        size,
-                                        isDarkMode,
-                                      ),
-                                      buildForecastToday(
-                                        "22:00",
-                                        -15,
-                                        1,
-                                        30,
-                                        FontAwesomeIcons.moon,
-                                        size,
-                                        isDarkMode,
-                                      ),
-                                      buildForecastToday(
-                                        "23:00",
-                                        -15,
-                                        15,
-                                        20,
-                                        FontAwesomeIcons.moon,
-                                        size,
-                                        isDarkMode,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: size.width * 0.05,
-                          vertical: size.height * 0.02,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                            color: Colors.white.withOpacity(0.05),
-                          ),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    top: size.height * 0.02,
-                                    left: size.width * 0.03,
-                                  ),
-                                  child: Text(
-                                    '7-day forecast',
-                                    style: GoogleFonts.questrial(
-                                      color: isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontSize: size.height * 0.025,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Divider(
-                                color: isDarkMode ? Colors.white : Colors.black,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(size.width * 0.005),
-                                child: Column(
-                                  children: [
-                                    //TODO: change weather forecast from local to api get
-                                    buildSevenDayForecast(
-                                      "Today", //day
-                                      minTemp, //min temperature
-                                      maxTemp, //max temperature
-                                      FontAwesomeIcons.cloud, //weather icon
-                                      size,
-                                      isDarkMode,
-                                    ),
-                                    buildSevenDayForecast(
-                                      "Wed",
-                                      -5,
-                                      5,
-                                      FontAwesomeIcons.sun,
-                                      size,
-                                      isDarkMode,
-                                    ),
-                                    buildSevenDayForecast(
-                                      "Thu",
-                                      -2,
-                                      7,
-                                      FontAwesomeIcons.cloudRain,
-                                      size,
-                                      isDarkMode,
-                                    ),
-                                    buildSevenDayForecast(
-                                      "Fri",
-                                      3,
-                                      10,
-                                      FontAwesomeIcons.sun,
-                                      size,
-                                      isDarkMode,
-                                    ),
-                                    buildSevenDayForecast(
-                                      "San",
-                                      5,
-                                      12,
-                                      FontAwesomeIcons.sun,
-                                      size,
-                                      isDarkMode,
-                                    ),
-                                    buildSevenDayForecast(
-                                      "Sun",
-                                      4,
-                                      7,
-                                      FontAwesomeIcons.cloud,
-                                      size,
-                                      isDarkMode,
-                                    ),
-                                    buildSevenDayForecast(
-                                      "Mon",
-                                      -2,
-                                      1,
-                                      FontAwesomeIcons.snowflake,
-                                      size,
-                                      isDarkMode,
-                                    ),
-                                    buildSevenDayForecast(
-                                      "Tues",
-                                      0,
-                                      3,
-                                      FontAwesomeIcons.cloudRain,
-                                      size,
-                                      isDarkMode,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildForecastToday(String time, int temp, int wind, int rainChance,
-      IconData weatherIcon, size, bool isDarkMode) {
-    return Padding(
-      padding: EdgeInsets.all(size.width * 0.025),
-      child: Column(
-        children: [
-          Text(
-            time,
-            style: GoogleFonts.questrial(
-              color: isDarkMode ? Colors.white : Colors.black,
-              fontSize: size.height * 0.02,
-            ),
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: size.height * 0.005,
-                ),
-                child: FaIcon(
-                  weatherIcon,
-                  color: isDarkMode ? Colors.white : Colors.black,
-                  size: size.height * 0.03,
-                ),
-              ),
-            ],
-          ),
-          Text(
-            '$temp˚C',
-            style: GoogleFonts.questrial(
-              color: isDarkMode ? Colors.white : Colors.black,
-              fontSize: size.height * 0.025,
-            ),
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: size.height * 0.01,
-                ),
-                child: FaIcon(
-                  FontAwesomeIcons.wind,
-                  color: Colors.grey,
-                  size: size.height * 0.03,
-                ),
-              ),
-            ],
-          ),
-          Text(
-            '$wind km/h',
-            style: GoogleFonts.questrial(
-              color: Colors.grey,
-              fontSize: size.height * 0.02,
-            ),
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: size.height * 0.01,
-                ),
-                child: FaIcon(
-                  FontAwesomeIcons.umbrella,
-                  color: Colors.blue,
-                  size: size.height * 0.03,
-                ),
-              ),
-            ],
-          ),
-          Text(
-            '$rainChance %',
-            style: GoogleFonts.questrial(
-              color: Colors.blue,
-              fontSize: size.height * 0.02,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildSevenDayForecast(String time, int minTemp, int maxTemp,
-      IconData weatherIcon, size, bool isDarkMode) {
-    return Padding(
-      padding: EdgeInsets.all(
-        size.height * 0.005,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.02,
-                ),
-                child: Text(
-                  time,
-                  style: GoogleFonts.questrial(
-                    color: isDarkMode ? Colors.white : Colors.black,
-                    fontSize: size.height * 0.025,
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Humidity',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${forecast['Humidity']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Chance',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.purple,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${forecast['Chance']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.purple,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.25,
-                ),
-                child: FaIcon(
-                  weatherIcon,
-                  color: isDarkMode ? Colors.white : Colors.black,
-                  size: size.height * 0.03,
-                ),
-              ),
-              Align(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: size.width * 0.15,
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Amount',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.teal,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${forecast['Amount']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.teal,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    '$minTemp˚C',
-                    style: GoogleFonts.questrial(
-                      color: isDarkMode ? Colors.white38 : Colors.black38,
-                      fontSize: size.height * 0.025,
-                    ),
-                  ),
-                ),
+                ],
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.05,
-                  ),
-                  child: Text(
-                    '$maxTemp˚C',
-                    style: GoogleFonts.questrial(
-                      color: isDarkMode ? Colors.white : Colors.black,
-                      fontSize: size.height * 0.025,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Divider(
-            color: isDarkMode ? Colors.white : Colors.black,
-          ),
-        ],
+            ),
+          );
+        },
       ),
     );
   }
 }
+
+void main() {
+  runApp(MaterialApp(
+    home: weather(),
+  ));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+// void main() {
+//   runApp(MaterialApp(
+//     title: 'Weather App',
+//     home: MyWidget(),
+//   ));
+// }
+//
+// class MyWidget extends StatefulWidget {
+//   @override
+//   _MyWidgetState createState() => _MyWidgetState();
+// }
+//
+// class _MyWidgetState extends State<MyWidget> {
+//   String weatherData = '';
+//   @override
+//   void initState() {
+//     super.initState();
+//     fetchWebsiteData();
+//   }
+//
+//   Future fetchWebsiteData() async {
+//     final url = Uri.parse(
+//         'https://www.accuweather.com/en/bd/dhaka/28143/hourly-weather-forecast/28143');
+//     final response = await http.get(url);
+//     dom.Document document = dom.Document.html(response.body);
+//
+//     final hourlyCard = document.querySelector('.hourly-card-nfl-header');
+//
+//     if (hourlyCard != null) {
+//       final timeElement = hourlyCard.querySelector('.date span');
+//       final temperatureElement = hourlyCard.querySelector('.temp');
+//       final weatherElement = hourlyCard.querySelector('.real-feel__text');
+//
+//       final time = timeElement?.text ?? '';
+//       final temperature = temperatureElement?.text ?? '';
+//       final weather = weatherElement?.text ?? '';
+//       print('$time - Temperature: $temperature, Weather: $weather');
+//       setState(() {
+//         weatherData = '$time - Temperature: $temperature, Weather: $weather';
+//       });
+//     } else {
+//       setState(() {
+//         weatherData = 'No data found';
+//       });
+//       print('No data found');
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Weather Recommendation'),
+//         centerTitle: true,
+//         backgroundColor: Colors.green,
+//       ),
+//       body: Center(
+//         child: Container(
+//           child: Text(weatherData), // Display the fetched weather data
+//         ),
+//       ),
+//     );
+//   }
+// }

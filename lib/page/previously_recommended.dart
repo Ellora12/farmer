@@ -1,186 +1,114 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
+import '../constants.dart' as globals;
+import 'package:intl/intl.dart';
 
 import 'recommend.dart';
 
-class previously extends StatelessWidget {
-  // This widget is the root of your application.
+class previously extends StatefulWidget {
+  const previously({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Previous Recommendations',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Previous list of Pests'),
-    );
+  State<previously> createState() => _previouslyState();
+}
+
+class _previouslyState extends State<previously> {
+  String ec = globals.my;
+  final databaseRef = FirebaseDatabase.instance.ref('Username/fertilizer');
+
+  List<Map<String, dynamic>> data = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  void fetchUsers() {
+    DatabaseReference nodeRef = databaseRef.child(ec);
+    nodeRef.onValue.listen((event) {
+      data.clear();
+      Map<dynamic, dynamic>? values =
+          event.snapshot.value as Map<dynamic, dynamic>?;
+      values?.forEach((key, value) {
+        int millisecondsSinceEpoch = int.parse(key);
+        DateTime dateTime =
+            DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
+        String uni = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
+        String N = value['nitrogen'] ?? '';
+        String K = value['Potassium'] ?? '';
+        String P = value['Phosphorus'] ?? '';
+        String A = value['Area'] ?? '';
+        String ST = value['Soil Type'] ?? '';
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+        data.add({
+          'uni': uni,
+          'nitrogen': N,
+          'Potassium': K,
+          'Phosphorus': P,
+          'Area': A,
+          'Soil Type': ST
+        });
+      });
+      setState(() {}); // update the UI with the fetched data
+    }, onError: (error) {
+      print('Failed to fetch data: $error');
+    });
+  }
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text(widget.title),
-          centerTitle: true,
-          backgroundColor: Colors.green),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [(new Color(0xffffffff)), new Color(0xff00f25f)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: ListView(
-          padding: const EdgeInsets.all(8),
-          children: [
-            SizedBox.square(
-              dimension: 20,
-            ),
-            Container(
-              child: Card(
-                color: Colors.redAccent,
-                elevation: 3,
-                child: ListTile(
-                  title: Text(
-                    "pest name Cotton bollworm",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
-                  ),
-                  subtitle: Text("01/08/2022"),
-                  trailing: Icon(Icons.label_important_outlined),
-                  leading: Icon(
-                    Icons.ac_unit_outlined,
-                    color: Colors.green,
-                    size: 40,
-                  ),
-                  contentPadding: EdgeInsets.all(12),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => recommend()),
-                    );
-                  },
+      body: ListView.builder(
+        itemCount: data.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Card(
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            elevation: 5,
+            child: ListTile(
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              leading: Icon(Icons.grass, color: Colors.green),
+              title: Text(
+                data[index]['uni'] ?? '',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.brown[900],
                 ),
               ),
-            ),
-            SizedBox.square(
-              dimension: 8,
-            ),
-            Container(
-              child: Card(
-                color: Colors.greenAccent,
-                elevation: 3,
-                child: ListTile(
-                  title: Text(
-                    "pest name Tobacco whitefly",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+              subtitle: Row(
+                children: [
+                  Icon(Icons.local_florist, color: Colors.orange),
+                  SizedBox(width: 5),
+                  Text(
+                    "N : P : K  VALUE " +
+                        (data[index]['nitrogen'] ?? '') +
+                        ":" +
+                        (data[index]['Phosphorus'] ?? '') +
+                        ":" +
+                        (data[index]['Potassium'] ?? ''),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[800],
+                    ),
                   ),
-                  subtitle: Text("03/02/2022"),
-                  trailing: Icon(Icons.label_important_outlined),
-                  leading: Icon(
-                    Icons.ac_unit_outlined,
-                    color: Colors.green,
-                    size: 40,
+                  SizedBox(width: 10),
+                  Icon(Icons.eco, color: Colors.blue),
+                  SizedBox(width: 5),
+                  Text(
+                    "Area :" + data[index]['Area'] ?? " ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[800],
+                    ),
                   ),
-                  contentPadding: EdgeInsets.all(12),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => recommend()),
-                    );
-                  },
-                ),
+                ],
               ),
             ),
-            SizedBox.square(
-              dimension: 8,
-            ),
-            Container(
-              child: Card(
-                color: Colors.greenAccent,
-                elevation: 3,
-                child: ListTile(
-                  title: Text(
-                    "pest name  Diamondback moth",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
-                  ),
-                  subtitle: Text("05/5/2022"),
-                  trailing: Icon(Icons.label_important_outlined),
-                  leading: Icon(
-                    Icons.ac_unit_outlined,
-                    color: Colors.green,
-                    size: 40,
-                  ),
-                  contentPadding: EdgeInsets.all(12),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => recommend()),
-                    );
-                  },
-                ),
-              ),
-            ),
-            SizedBox.square(
-              dimension: 8,
-            ),
-            Container(
-              child: Card(
-                color: Colors.greenAccent,
-                elevation: 3,
-                child: ListTile(
-                  title: Text(
-                    "pest name Red flour beetle",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
-                  ),
-                  subtitle: Text("21/05/2022"),
-                  trailing: Icon(Icons.label_important_outlined),
-                  leading: Icon(
-                    Icons.ac_unit_outlined,
-                    color: Colors.green,
-                    size: 40,
-                  ),
-                  contentPadding: EdgeInsets.all(12),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => recommend()),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
+          );
+          ;
+        },
       ),
     );
   }
