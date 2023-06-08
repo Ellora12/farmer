@@ -1,15 +1,25 @@
+import 'dart:async';
+
 import 'package:farmer/page/fertilizer.dart';
 import 'package:farmer/widget/navigation_drawer_widget.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
-
+import 'package:quickalert/quickalert.dart';
+import '../constants.dart' as globals;
 import 'landingpage.dart';
 import 'page/addcrop.dart';
 
 import 'page/irrselect.dart';
 import 'page/location.dart';
-import 'page/weather.dart';
+import 'page/weather2.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+// User? user = FirebaseAuth.instance.currentUser;
+// DatabaseReference databaseRef = FirebaseDatabase.instance.ref();
+// Query query = databaseRef.child('Users/Profile').orderByChild('name');
+
 
 void main() => runApp(MaterialApp(home: Gd()));
 
@@ -19,11 +29,61 @@ class Gd extends StatefulWidget {
 }
 
 class HomeState extends State<Gd> {
+  String ec = globals.my;
+  final databaseRef = FirebaseDatabase.instance.ref('Soilsensor');
+
+  String dataString = '';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void info() {
+    DatabaseReference nodeRef = databaseRef.child(ec);
+    nodeRef.onValue.listen((event) {
+      Map<dynamic, dynamic>? values =
+      event.snapshot.value as Map<dynamic, dynamic>?;
+      if (values != null) {
+        // Access the specific values you need
+        String pumpValue = values['pump'].toString() ?? '';
+        String sensor1Value = values['sensor1'].toString() ?? '';
+        String sensor2Value = values['sensor2'].toString() ?? '';
+        String sensor3Value = values['sensor3'].toString() ?? '';
+
+        // Add the values to the data list
+        String dataString =
+            'Pump: $pumpValue\n\nSensor1: $sensor1Value\n\nSensor2: $sensor2Value\n\nSensor3: $sensor3Value';
+
+        QuickAlert.show(
+          type: QuickAlertType.info,
+          title: 'Firebase Data',
+          text: dataString,
+          context: context,
+        );
+      }
+    }).onError((error) {
+      print('Failed to fetch data: $error');
+      QuickAlert.show(
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Failed to fetch data from Firebase',
+        context: context,
+      );
+    });
+
+
+
+    print(user);
+    print(user!.displayName);
+    print("hu");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0XFFBFDFB2),
-      drawer: NavigationDrawerWidget(),
+       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
         title: Text('Service list'),
         centerTitle: true,
@@ -73,12 +133,7 @@ class HomeState extends State<Gd> {
                       width: 24,
                     ),
                     onPressed: () {
-                      QuickAlert.show(
-                        context: context,
-                        type: QuickAlertType.info,
-                        text:
-                            'Pump is on\n\n MOISTURE LEVEL\n Field 1 :25.6 \n Field 2 :25.6 \n Field 3 :25.6',
-                      );
+                      info();
                     },
                   )
                 ],
@@ -105,12 +160,12 @@ class GridDashboard extends StatelessWidget {
       img: "assests/fartilizer.png",
       x: 1);
   Items item3 = new Items(
-      title: "Agriculture Office",
+      title: "Area Calc From GoogleMap",
       event: "",
       img: "assests/location.png",
       x: 2);
   Items item4 = new Items(
-      title: "Irrigation Control", event: "", img: "assests/irrigc.png", x: 3);
+      title: "Irrigation Info", event: "", img: "assests/irrigc.png", x: 3);
   Items item5 = new Items(
       title: "Irrigation History",
       event: "4 Items",
@@ -122,7 +177,7 @@ class GridDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Items> myList = [item1, item2, item3, item4, item5, item6];
-    var color = 0xff453658;
+
     return Flexible(
       child: GridView.count(
           childAspectRatio: 1.0,
@@ -176,16 +231,16 @@ class Items {
 
   Items(
       {required this.title,
-      required this.event,
-      required this.img,
-      required this.x});
+        required this.event,
+        required this.img,
+        required this.x});
 }
 
 void selectedItem(BuildContext context, int index) {
   switch (index) {
     case 0:
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => weather(),
+        builder: (context) => weather2(),
       ));
       break;
     case 1:

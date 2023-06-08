@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
-import 'package:html/dom.dart' as dom;
 import '../widget/navigation_drawer_widget.dart';
 import 'dart:math' as math;
 import 'package:farmer/page/rain.dart';
-import 'package:farmer/page/time.dart';
+import 'package:jiffy/jiffy.dart';
+
+var now = Jiffy();
+String currentDate = (now.yMMMMd).toString();
+
+String dayOfWeek = now.EEEE;
+
+
 class weather2 extends StatefulWidget {
   @override
   _weatherState createState() => _weatherState();
 }
 
+
 class _weatherState extends State<weather2> {
+  bool isLoading = true;
   List<Map<String, String>> hourlyForecastData = [];
 
   @override
@@ -50,23 +58,57 @@ class _weatherState extends State<weather2> {
         hourlyForecastData.add(forecast);
       }
 
-      setState(() {});
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? LoadingScreen()
+        : NormalScreen(hourlyForecastData: hourlyForecastData);
+  }
+}
 
+class LoadingScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+class NormalScreen extends StatefulWidget {
+  List<Map<String, String>> hourlyForecastData;
+  final Key parallaxOne = GlobalKey();
+  bool showDate = true;
+
+  NormalScreen({required this.hourlyForecastData});
+
+  @override
+  _NormalScreenState createState() => _NormalScreenState(hourlyForecastData: hourlyForecastData);
+}
+
+class _NormalScreenState extends State<NormalScreen> {
+  List<Map<String, String>> hourlyForecastData;
   final Key parallaxOne = GlobalKey();
   bool showdate = true;
 
+  _NormalScreenState({required this.hourlyForecastData});
 
   @override
   Widget build(BuildContext context) {
     double res_width = MediaQuery.of(context).size.width;
     double res_height = MediaQuery.of(context).size.height;
-    debugShowCheckedModeBanner: false;
-    final first=hourlyForecastData[0];
+    debugShowCheckedModeBanner:
+    false;
+    final first = hourlyForecastData[0];
     return Scaffold(
-
       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
         centerTitle: true,
@@ -118,8 +160,6 @@ class _weatherState extends State<weather2> {
                             SizedBox(
                               height: res_height * 0.04,
                             ),
-
-
                             Expanded(
                               child: ListView.builder(
                                   itemCount: hourlyForecastData.length,
@@ -137,16 +177,26 @@ class _weatherState extends State<weather2> {
                                               padding: EdgeInsets.all(8),
                                               decoration: BoxDecoration(
                                                 color: Colors.blue,
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                BorderRadius.circular(8),
                                               ),
-                                              child: Icon(Icons.access_time, color: Colors.white),
+                                              child: Icon(Icons.access_time,
+                                                  color: Colors.white),
                                             ),
                                             SizedBox(width: 5),
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                               children: [
-                                                Text('Time', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                                                Text('${forecast['Time']?.substring(0, 5)}', style: TextStyle(fontSize: 16)),
+                                                Text('Time',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                        FontWeight.bold)),
+                                                Text(
+                                                    '${forecast['Time']?.substring(0, 5)}',
+                                                    style: TextStyle(
+                                                        fontSize: 16)),
                                               ],
                                             ),
                                             SizedBox(width: 20),
@@ -154,16 +204,26 @@ class _weatherState extends State<weather2> {
                                               padding: EdgeInsets.all(8),
                                               decoration: BoxDecoration(
                                                 color: Colors.orange,
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                BorderRadius.circular(8),
                                               ),
-                                              child: Icon(Icons.thermostat, color: Colors.white),
+                                              child: Icon(Icons.thermostat,
+                                                  color: Colors.white),
                                             ),
                                             SizedBox(width: 5),
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                               children: [
-                                                Text('Temp', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                                                Text('${forecast['Temperature']}', style: TextStyle(fontSize: 16)),
+                                                Text('Temp',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                        FontWeight.bold)),
+                                                Text(
+                                                    '${forecast['Temperature']}',
+                                                    style: TextStyle(
+                                                        fontSize: 16)),
                                               ],
                                             ),
                                             SizedBox(width: 20),
@@ -171,23 +231,24 @@ class _weatherState extends State<weather2> {
                                               padding: EdgeInsets.all(8),
                                               decoration: BoxDecoration(
                                                 color: Colors.green,
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                BorderRadius.circular(8),
                                               ),
-                                              child: Icon(Icons.waves, color: Colors.white),
+                                              child: Icon(Icons.waves,
+                                                  color: Colors.white),
                                             ),
                                             SizedBox(width: 5),
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                               children: [
-                                                Text('${forecast['Amount']}', style: TextStyle(fontSize: 14)),
+                                                Text('${forecast['Amount']}',
+                                                    style: TextStyle(
+                                                        fontSize: 14)),
                                               ],
                                             ),
-
-
                                           ],
-                                        )
-                                        ,
-
+                                        ),
                                         SizedBox(
                                           height: 5,
                                         ),
@@ -254,7 +315,7 @@ class _weatherState extends State<weather2> {
                   borderRadius:
                   BorderRadius.only(bottomLeft: Radius.circular(50))),
               child: Padding(
-                padding: EdgeInsets.only( left: 20),
+                padding: EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
                     SizedBox(
@@ -279,7 +340,6 @@ class _weatherState extends State<weather2> {
                 BorderRadius.only(bottomLeft: Radius.circular(50)),
                 child: Column(
                   children: [
-
                     AnimatedContainer(
                       width: 70,
                       height: showdate ? 110 : 0,
@@ -287,15 +347,15 @@ class _weatherState extends State<weather2> {
                       duration: Duration(milliseconds: 400),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children:  [
                           Text(
-                            'Wed',
+                            currentDate.substring(0, currentDate.length - 4),
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
-                          Text('05',
+                          Text(dayOfWeek.substring(0,3),
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 25,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold)),
                         ],
                       ),
@@ -333,7 +393,7 @@ class _weatherState extends State<weather2> {
                 children: [
                   Text(
                     '${first['Temperature']}',
-                   style: TextStyle(fontSize: 50, color: Colors.white),
+                    style: TextStyle(fontSize: 50, color: Colors.white),
                   ),
                   // Text(
                   //   'Feels like 17°',
@@ -363,39 +423,4 @@ class _weatherState extends State<weather2> {
       ),
     );
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-void main() {
-  runApp(MaterialApp(
-    home: weather2(),
-  ));
-}
-
-
-
-
-
-
-
-

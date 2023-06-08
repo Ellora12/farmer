@@ -56,7 +56,9 @@ class InitState extends State<Signup> {
       _auth
           .createUserWithEmailAndPassword(
               email: emailController.text.toString(),
-              password: passwordController.text.toString())
+              password: passwordController.text.toString(),
+              // name: fullnameController.text.toString(),
+      )
           .then((value) {
         databaseRef.child(emailParts[0]).set(
             {'name': name, 'email': em, 'password': pass, 'PhoneNo': phn_no});
