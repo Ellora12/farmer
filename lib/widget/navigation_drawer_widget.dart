@@ -5,19 +5,73 @@ import 'package:farmer/page/irrselect.dart';
 import 'package:farmer/page/location.dart';
 import 'package:farmer/page/weather.dart';
 import 'package:farmer/page/weather2.dart';
+import '../constants.dart' as globals;
 import 'package:farmer/profile.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:farmer/page/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 User? user = FirebaseAuth.instance.currentUser;
-class NavigationDrawerWidget extends StatelessWidget {
+class NavigationDrawerWidget extends StatefulWidget {
+  @override
+  State<NavigationDrawerWidget> createState() => _NavigationDrawerWidgetState();
+}
+
+class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
+  final databaseRef2 = FirebaseDatabase.instance.ref('Users/Profile');
+  String ec = globals.my;
+  // Add the necessary variables for name and email
+  String name = '';
+  String email = '';
+  String _imageUrl = " ";
   final padding = EdgeInsets.symmetric(horizontal: 20);
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
+  }
+
+  String getImageUrl() {
+    final dbRef = FirebaseDatabase.instance.ref().child("Username/name/$ec");
+    dbRef.onValue.listen((event) => {
+      event.snapshot.children.forEach((child) {
+        if (child.key == "pro") {
+          setState(() {
+            _imageUrl = child.value.toString();
+          });
+        }
+      })
+    });
+    return _imageUrl;
+  }
+
+
+  // Implement the fetchUsers method to fetch the name and email data
+  void fetchUsers() {
+    DatabaseReference nodeRef = databaseRef2.child(ec);
+
+    nodeRef.onValue.listen((event) {
+      Map<dynamic, dynamic>? values =
+      event.snapshot.value as Map<dynamic, dynamic>?;
+      if (values != null) {
+        // Access the specific values you need
+        setState(() {
+          email = values['email'].toString() ?? '';
+          name = values['name'].toString() ?? '';
+        });
+      }
+    }).onError((error) {
+      print('Failed to fetch data: $error');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final name = 'Ellora Yasi';
-    final email = 'ellora@abs.com';
+
     final urlImage =
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
+        getImageUrl();
 
     return Drawer(
       child: Material(
@@ -33,6 +87,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               )),
             ),
             Container(
+
               padding: padding,
               child: Column(
                 children: [
@@ -94,7 +149,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         splashColor: Colors.black26,
         onTap: onClicked,
         child: Container(
-          padding: padding.add(EdgeInsets.symmetric(vertical: 40)),
+          padding: padding.add(EdgeInsets.symmetric(vertical: 40,horizontal: -10)),
           child: Row(
             children: [
               CircleAvatar(radius: 30, backgroundImage: NetworkImage(urlImage)),
@@ -171,3 +226,4 @@ class NavigationDrawerWidget extends StatelessWidget {
     }
   }
 }
+

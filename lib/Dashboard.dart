@@ -30,37 +30,87 @@ class Gd extends StatefulWidget {
 
 class HomeState extends State<Gd> {
   String ec = globals.my;
-  final databaseRef = FirebaseDatabase.instance.ref('Soilsensor');
+  final databaseRef = FirebaseDatabase.instance.ref('fieldwater');
+  final databaseRef2 = FirebaseDatabase.instance.ref('Users/Profile');
+  String Email="";
+  String Name="";
+  String pumpValue = '';
+  String sensor1Value = '';
+  String pumpValue2 = '';
+  String sensor2Value = '';
 
   String dataString = '';
 
   @override
   void initState() {
     super.initState();
+    fetchUsers();
   }
 
-  void info() {
-    DatabaseReference nodeRef = databaseRef.child(ec);
+  void fetchUsers() {
+    DatabaseReference nodeRef = databaseRef2.child(ec);
+
     nodeRef.onValue.listen((event) {
       Map<dynamic, dynamic>? values =
       event.snapshot.value as Map<dynamic, dynamic>?;
       if (values != null) {
         // Access the specific values you need
-        String pumpValue = values['pump'].toString() ?? '';
-        String sensor1Value = values['sensor1'].toString() ?? '';
-        String sensor2Value = values['sensor2'].toString() ?? '';
-        String sensor3Value = values['sensor3'].toString() ?? '';
+        setState(() {
+          Email = values['email'].toString() ?? '';
+          Name = values['name'].toString() ?? '';
+        });
 
-        // Add the values to the data list
+
+
+
+
+      }
+    }).onError((error) {
+      print('Failed to fetch data: $error');
+
+    });
+
+  }
+
+
+
+
+
+  void info() {
+    DatabaseReference nodeRef = databaseRef.child('$ec/field1/fieldinfo');
+    DatabaseReference nodeRef2 = databaseRef.child('$ec/field2/fieldinfo');
+
+
+
+    bool nodeRefCompleted = false;
+    bool nodeRef2Completed = false;
+
+    void checkCompletion() {
+      if (nodeRefCompleted && nodeRef2Completed) {
+        // Both listeners have completed fetching data
         String dataString =
-            'Pump: $pumpValue\n\nSensor1: $sensor1Value\n\nSensor2: $sensor2Value\n\nSensor3: $sensor3Value';
+            'Pump: $pumpValue\n\nSensor1: $sensor1Value\n\nPump: $pumpValue2\n\nSensor2: $sensor2Value\n\n';
 
         QuickAlert.show(
           type: QuickAlertType.info,
           title: 'Firebase Data',
           text: dataString,
           context: context,
+
         );
+      }
+    }
+
+    nodeRef.onValue.listen((event) {
+      Map<dynamic, dynamic>? values =
+      event.snapshot.value as Map<dynamic, dynamic>?;
+      if (values != null) {
+        // Access the specific values you need
+        pumpValue = values['pump'].toString() ?? '';
+        sensor1Value = values['sensor1'].toString() ?? '';
+
+        nodeRefCompleted = true;
+        checkCompletion();
       }
     }).onError((error) {
       print('Failed to fetch data: $error');
@@ -69,15 +119,34 @@ class HomeState extends State<Gd> {
         title: 'Error',
         text: 'Failed to fetch data from Firebase',
         context: context,
+        autoCloseDuration:Duration(milliseconds: 1000),
+
       );
     });
 
+    nodeRef2.onValue.listen((event) {
+      Map<dynamic, dynamic>? values2 =
+      event.snapshot.value as Map<dynamic, dynamic>?;
+      if (values2 != null) {
+        // Access the specific values you need
+        pumpValue2 = values2['pump'].toString() ?? '';
+        sensor2Value = values2['sensor2'].toString() ?? '';
 
-
-    print(user);
-    print(user!.displayName);
-    print("hu");
+        nodeRef2Completed = true;
+        checkCompletion();
+      }
+    }).onError((error) {
+      print('Failed to fetch data: $error');
+      QuickAlert.show(
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Failed to fetch data from Firebase',
+        context: context,
+          autoCloseDuration:Duration(milliseconds: 1000),
+      );
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +173,7 @@ class HomeState extends State<Gd> {
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: Text(
-                          "Abrar045",
+                          Name,
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 18,
@@ -126,6 +195,7 @@ class HomeState extends State<Gd> {
                       ),
                     ],
                   ),
+
                   IconButton(
                     alignment: Alignment.topCenter,
                     icon: Image.asset(

@@ -22,10 +22,44 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String _imageUrl = " ";
   bool showPassword = false;
   String ee = globals.my;
+  final databaseRef2 = FirebaseDatabase.instance.ref('Users/Profile');
+  String Email="";
+  String Name="";
+  String Phone="";
+  String Password="";
 
   @override
   void initState() {
     super.initState();
+    fetchUsers();
+  }
+
+
+  void fetchUsers() {
+    DatabaseReference nodeRef = databaseRef2.child(ee);
+
+    nodeRef.onValue.listen((event) {
+      Map<dynamic, dynamic>? values =
+      event.snapshot.value as Map<dynamic, dynamic>?;
+      if (values != null) {
+        // Access the specific values you need
+        setState(() {
+          Email = values['email'].toString() ?? '';
+          Name = values['name'].toString() ?? '';
+          Password=values['password'];
+          Phone=values['PhoneNo'];
+        });
+
+
+
+
+
+      }
+    }).onError((error) {
+      print('Failed to fetch data: $error');
+
+    });
+
   }
 
   String getImageUrl() {
@@ -134,10 +168,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("Full Name", "Dor Alex", false),
-              buildTextField("E-mail", "alexd@gmail.com", false),
-              buildTextField("Password", "********", true),
-              buildTextField("Location", "TLV, Israel", false),
+              buildTextField("Full Name", Name, false),
+              buildTextField("E-mail", Email, false),
+              buildTextField("Password", Password, true),
+              buildTextField("Phone No", Phone, false),
               SizedBox(
                 height: 35,
               ),

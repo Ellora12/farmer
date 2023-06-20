@@ -67,6 +67,7 @@ class _previouslyState extends State<previously> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: ListView.builder(
         itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {

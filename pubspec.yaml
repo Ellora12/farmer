@@ -59,7 +59,7 @@ dependencies:
   html: ^0.15.0
   intl: ^0.17.0
   jiffy: ^5.0.0
-
+  pdf: ^3.10.1
 
 
 

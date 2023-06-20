@@ -35,6 +35,7 @@ class _addcropState extends State<addcrop> {
   @override
   void initState() {
     super.initState();
+    fetchuser();
     List<String> nodePaths = [
       'fieldwater/sayedulabrar14045/field1/fieldName',
       'fieldwater/sayedulabrar14045/field2/fieldName'
@@ -45,6 +46,11 @@ class _addcropState extends State<addcrop> {
       });
     });
   }
+
+  void fetchuser(){
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +83,7 @@ class _addcropState extends State<addcrop> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 16.0), // Add spacing from the top
+              SizedBox(height: 100.0), // Add spacing from the top
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -95,7 +101,7 @@ class _addcropState extends State<addcrop> {
                   ),
                 ],
               ),
-              SizedBox(height: 16.0), // Add spacing between the image and the next widget
+              SizedBox(height: 70.0), // Add spacing between the image and the next widget
               Column(
                 children: [
                   Row(

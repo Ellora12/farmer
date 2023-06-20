@@ -26,7 +26,7 @@ class irrselect extends StatelessWidget {
         elevation: 0.0,
       ),
       body: Container(
-        height: 700,
+        height: 900,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [(new Color(0xffffffff)), new Color(0xff00f25f)],
@@ -35,7 +35,7 @@ class irrselect extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0),
+          padding: const EdgeInsets.fromLTRB(0.0, 100.0, 20.0, 0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,7 +58,7 @@ class irrselect extends StatelessWidget {
                 ),
                 Divider(
                   color: Colors.white10,
-                  height: 16.0,
+                  height: 60.0,
                 ),
                 Column(
                   children: [
@@ -138,43 +138,7 @@ class irrselect extends StatelessWidget {
                     SizedBox.square(
                       dimension: 20,
                     ),
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            InkWell(
-                              child: Container(
-                                margin: EdgeInsets.only(left: 40),
-                                height: 100,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  image: DecorationImage(
-                                      opacity: 0.9,
-                                      image: AssetImage('assests/crop.png'),
-                                      fit: BoxFit.cover),
-                                ),
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => irrigationh()),
-                                );
-                              },
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 40, top: 10),
-                              child: Text(
-                                "Field 3",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w900, fontSize: 20),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
+
                   ],
                 ),
                 Divider(

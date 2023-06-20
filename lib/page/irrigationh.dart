@@ -1,151 +1,172 @@
-import 'package:flutter/material.dart';
-import 'dart:math';
-import 'package:paginated_search_bar/paginated_search_bar.dart';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/pdf.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() => runApp(MaterialApp(
-      home: irrigationh(),
-    ));
+import '../constants.dart' as globals;
 
-class irrigationh extends StatelessWidget {
-  // This widget is the root of your application.
+class irrigationh extends StatefulWidget {
+  const irrigationh({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Irrigation History',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Irrigation History'),
-    );
+  State<irrigationh> createState() => _irrigationhState();
+}
+
+class _irrigationhState extends State<irrigationh> {
+  String ec = globals.my;
+  final databaseRef = FirebaseDatabase.instance.ref().child('fieldwater');
+
+
+  List<ExampleItem> monthlydata = [];
+  List<ExampleItem> displayedData=[];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  void fetchUsers() {
+    DatabaseReference nodeRef = databaseRef.child("$ec/field1/Monthly");
+    nodeRef.onValue.listen((event) {
+      monthlydata.clear();
+      Map<dynamic, dynamic>? values =
+      event.snapshot.value as Map<dynamic, dynamic>?;
+      values?.forEach((key, value) {
+        monthlydata.add(
+          ExampleItem(
+            fieldno: 1,
+            month: key,
+            water: value,
+          ),
+        );
+      });
+      // update the UI with the fetched data
+    }, onError: (error) {
+      print('Failed to fetch data: $error');
+    });
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+    DatabaseReference nodeRef3 = databaseRef.child("$ec/field2/Monthly");
+    nodeRef3.onValue.listen((event) {
+      Map<dynamic, dynamic>? values =
+      event.snapshot.value as Map<dynamic, dynamic>?;
+      values?.forEach((key, value) {
+        monthlydata.add(
+          ExampleItem(
+            fieldno: 2,
+            month: key,
+            water: value,
+          ),
+        );
+      });
+      setState(() {
+        displayedData = monthlydata;
+      });
+      // update the UI with the fetched data
+    }, onError: (error) {
+      print('Failed to fetch data: $error');
+    });
+  }
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  Future<Uint8List> generatePdf(List<ExampleItem> data) async {
+    final pdf = pw.Document();
 
-  final String title;
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Table.fromTextArray(
+            context: context,
+            data: <List<String>>[
+              <String>['Field No', 'Monthly', 'Water Used'],
+              ...data.map((item) =>
+              [item.fieldno.toString(), item.month, item.water.toString()]),
+            ],
+          );
+        },
+      ),
+    );
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+    return pdf.save();
+  }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final DataTableSource _data = MyData();
+  Future<void> savePdf(Uint8List pdfBytes) async {
+    final directory = await getExternalStorageDirectory();
+    final file = File('${directory!.path}/irrigation_history.pdf');
+    await file.writeAsBytes(pdfBytes);
+    print('PDF saved to ${file.path}');
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-          title: Text(widget.title),
-          centerTitle: true,
-          backgroundColor: Color(0xff1fd655)),
+        title: Text("Irrigation History"),
+        centerTitle: true,
+        backgroundColor: const Color(0xff1fd655),
+      ),
       body: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [(new Color(0xffffffff)), new Color(0xff00f25f)],
+              colors: [const Color(0xffffffff), const Color(0xff00f25f)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
           ),
           child: Column(
             children: [
-              Container(
-                margin: EdgeInsets.all(10),
-                child: Text(
-                  "Enter your Date Range",
-                  style: TextStyle(fontSize: 25),
-                ),
-              ),
-              SizedBox.square(
+              const SizedBox.square(
                 dimension: 20,
               ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: PaginatedSearchBar<ExampleItem>(
-                  onSearch: ({
-                    required pageIndex,
-                    required pageSize,
-                    required searchQuery,
-                  }) async {
-                    // Call your search API to return a list of items
-                    return [
-                      ExampleItem(title: 'Item 0'),
-                      ExampleItem(title: 'Item 1'),
-                    ];
-                  },
-                  itemBuilder: (
-                    context, {
-                    required item,
-                    required index,
-                  }) {
-                    return Text(item.title);
-                  },
-                ),
-              ),
               PaginatedDataTable(
-                source: _data,
+                source: ExampleDataSource(displayedData),
                 columns: const [
                   DataColumn(
-                      label: Text(
-                    "Field No",
-                    style: TextStyle(
+                    label: Text(
+                      "Field No",
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic,
-                        color: Colors.black),
-                  )),
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                   DataColumn(
-                      label: Text(
-                    "Crop Name",
-                    style: TextStyle(
+                    label: Text(
+                      "Monthly",
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic,
-                        color: Colors.black),
-                  )),
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                   DataColumn(
-                      label: Text(
-                    "Water Used",
-                    style: TextStyle(
+                    label: Text(
+                      "Water Used",
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic,
-                        color: Colors.black),
-                  )),
-                  DataColumn(
-                      label: Text(
-                    "Date",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.black),
-                  ))
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                 ],
                 columnSpacing: 30,
                 horizontalMargin: 60,
                 rowsPerPage: 8,
+              ),
+              ElevatedButton(
+                onPressed: () => generateAndSavePdf(displayedData),
+                child: Text('Download as PDF'),
               ),
             ],
           ),
@@ -153,62 +174,54 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-}
 
-class MyData extends DataTableSource {
-  final List<Map<String, dynamic>> _data = List.generate(
-      10,
-      (index) => {
-            "Field No": " $index",
-            "Crop Name": "Crop $index",
-            "Water Used": Random().nextInt(10000),
-            "Date": "$index/10/2022",
-          });
-
-  final List<Map<String, dynamic>> _dat = List.generate(
-      0,
-      (index) =>
-          {"Field No": "", "Crop Name": "", "Water Used": "", "Date": ""});
-
-  @override
-  DataRow? getRow(int index) {
-    return DataRow(cells: [
-      DataCell(Text(
-        _data[index]['Field No'],
-        style: TextStyle(fontSize: 20, color: Colors.blueGrey),
-      )),
-      DataCell(Text(
-        _data[index]["Crop Name"].toString(),
-        style: TextStyle(fontSize: 20, color: Colors.blueGrey),
-      )),
-      DataCell(Text(
-        _data[index]["Water Used"].toString(),
-        style: TextStyle(fontSize: 20, color: Colors.blueGrey),
-      )),
-      DataCell(Text(
-        _data[index]["Date"],
-        style: TextStyle(fontSize: 20, color: Colors.blueGrey),
-      )),
-    ]);
+  Future<void> generateAndSavePdf(List<ExampleItem> data) async {
+    Uint8List pdfBytes = await generatePdf(data);
+    await savePdf(pdfBytes);
   }
-
-  @override
-  // TODO: implement isRowCountApproximate
-  bool get isRowCountApproximate => false;
-
-  @override
-  // TODO: implement rowCount
-  int get rowCount => _data.length;
-
-  @override
-  // TODO: implement selectedRowCount
-  int get selectedRowCount => 0;
 }
 
 class ExampleItem {
-  final String title;
+  final int fieldno;
+  final String month;
+  final dynamic water;
 
   ExampleItem({
-    required this.title,
+    required this.fieldno,
+    required this.month,
+    required this.water,
   });
+}
+
+class ExampleDataSource extends DataTableSource {
+  final List<ExampleItem> data;
+
+  ExampleDataSource(this.data);
+
+  @override
+  DataRow? getRow(int index) {
+    if (index >= data.length) {
+      return null;
+    }
+
+    final item = data[index];
+
+    return DataRow.byIndex(
+      index: index,
+      cells: [
+        DataCell(Text(item.fieldno.toString())),
+        DataCell(Text(item.month.toString())),
+        DataCell(Text(item.water.toString())),
+      ],
+    );
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => data.length;
+
+  @override
+  int get selectedRowCount => 0;
 }
