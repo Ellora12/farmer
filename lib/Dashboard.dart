@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:farmer/Login.dart';
 import 'package:farmer/page/fertilizer.dart';
 import 'package:farmer/widget/navigation_drawer_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -40,7 +42,7 @@ class HomeState extends State<Gd> {
   String sensor2Value = '';
 
   String dataString = '';
-
+  bool showAlert = false;
   @override
   void initState() {
     super.initState();
@@ -73,55 +75,19 @@ class HomeState extends State<Gd> {
   }
 
 
-
-
-
-  void info() {
+  void checkCompletion() {
     DatabaseReference nodeRef = databaseRef.child('$ec/field1/fieldinfo');
     DatabaseReference nodeRef2 = databaseRef.child('$ec/field2/fieldinfo');
-
-
-
-    bool nodeRefCompleted = false;
-    bool nodeRef2Completed = false;
-
-    void checkCompletion() {
-      if (nodeRefCompleted && nodeRef2Completed) {
-        // Both listeners have completed fetching data
-        String dataString =
-            'Pump: $pumpValue\n\nSensor1: $sensor1Value\n\nPump: $pumpValue2\n\nSensor2: $sensor2Value\n\n';
-
-        QuickAlert.show(
-          type: QuickAlertType.info,
-          title: 'Firebase Data',
-          text: dataString,
-          context: context,
-
-        );
-      }
-    }
-
     nodeRef.onValue.listen((event) {
       Map<dynamic, dynamic>? values =
       event.snapshot.value as Map<dynamic, dynamic>?;
       if (values != null) {
         // Access the specific values you need
-        pumpValue = values['pump'].toString() ?? '';
-        sensor1Value = values['sensor1'].toString() ?? '';
-
-        nodeRefCompleted = true;
-        checkCompletion();
+        setState(() {
+          pumpValue = values['pump'].toString() ?? '';
+          sensor1Value = values['sensor1'].toString() ?? '';
+        });
       }
-    }).onError((error) {
-      print('Failed to fetch data: $error');
-      QuickAlert.show(
-        type: QuickAlertType.error,
-        title: 'Error',
-        text: 'Failed to fetch data from Firebase',
-        context: context,
-        autoCloseDuration:Duration(milliseconds: 1000),
-
-      );
     });
 
     nodeRef2.onValue.listen((event) {
@@ -129,22 +95,46 @@ class HomeState extends State<Gd> {
       event.snapshot.value as Map<dynamic, dynamic>?;
       if (values2 != null) {
         // Access the specific values you need
-        pumpValue2 = values2['pump'].toString() ?? '';
-        sensor2Value = values2['sensor2'].toString() ?? '';
-
-        nodeRef2Completed = true;
-        checkCompletion();
+        setState(() {
+          pumpValue2 = values2['pump'].toString() ?? '';
+          sensor2Value = values2['sensor2'].toString() ?? '';
+        });
       }
-    }).onError((error) {
-      print('Failed to fetch data: $error');
-      QuickAlert.show(
-        type: QuickAlertType.error,
-        title: 'Error',
-        text: 'Failed to fetch data from Firebase',
-        context: context,
-          autoCloseDuration:Duration(milliseconds: 1000),
-      );
     });
+  }
+
+
+  void info() {
+
+        // Both listeners have completed fetching data
+        String dataString =
+            'Pump: $pumpValue\n\nSensor1: $sensor1Value\n\nPump: $pumpValue2\n\nSensor2: $sensor2Value\n\n';
+
+
+        if (showAlert) {
+
+          QuickAlert.show(
+            type: QuickAlertType.info,
+            title: 'Firebase Data',
+            text: dataString,
+            context: context,
+            onConfirmBtnTap: () {
+              checkCompletion();
+              Future.delayed(Duration(seconds: 0), () {
+                Navigator.pop(context);
+                setState(() {
+                  showAlert = false; // Dismiss the QuickAlert when the user clicks "Okay"
+                });
+              });
+            },
+          );
+
+        }
+
+
+
+
+
   }
 
 
@@ -203,6 +193,9 @@ class HomeState extends State<Gd> {
                       width: 24,
                     ),
                     onPressed: () {
+                      setState(() {
+                        showAlert = true;
+                      });
                       info();
                     },
                   )
@@ -335,7 +328,7 @@ void selectedItem(BuildContext context, int index) {
       break;
     case 5:
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => landingpage(),
+        builder: (context) => Login(),
       ));
       break;
   }

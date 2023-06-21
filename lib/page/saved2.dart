@@ -73,11 +73,14 @@ class _EditProfilePageState extends State<info> {
 
       // Save the data to the document
       final databaseRef = FirebaseDatabase.instance.ref('fieldwater');
-      databaseRef.child("$ec/$fieldNo/fieldName").set({
-        'fieldNo': fieldNo,
-        'plant': cropName,
-        'soil': soilType,
-      });
+      if (fieldNo.isNotEmpty && cropName.isNotEmpty && soilType.isNotEmpty){
+        databaseRef.child("$ec/$fieldNo/fieldName").set({
+          'fieldNo': fieldNo,
+          'plant': cropName,
+          'soil': soilType,
+        });
+      }
+
 
 
     } catch (e) {

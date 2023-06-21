@@ -10,66 +10,80 @@ import 'package:path_provider/path_provider.dart';
 import '../constants.dart' as globals;
 
 class irrigationh extends StatefulWidget {
-  const irrigationh({Key? key}) : super(key: key);
-
+  const irrigationh({Key? key, required this.ff}) : super(key: key);
+  final int ff;
   @override
   State<irrigationh> createState() => _irrigationhState();
 }
 
+
 class _irrigationhState extends State<irrigationh> {
   String ec = globals.my;
   final databaseRef = FirebaseDatabase.instance.ref().child('fieldwater');
-
+   late int ff;
 
   List<ExampleItem> monthlydata = [];
   List<ExampleItem> displayedData=[];
 
+
   @override
   void initState() {
     super.initState();
+    ff=widget.ff;
     fetchUsers();
   }
 
   void fetchUsers() {
-    DatabaseReference nodeRef = databaseRef.child("$ec/field1/Monthly");
-    nodeRef.onValue.listen((event) {
-      monthlydata.clear();
-      Map<dynamic, dynamic>? values =
-      event.snapshot.value as Map<dynamic, dynamic>?;
-      values?.forEach((key, value) {
-        monthlydata.add(
-          ExampleItem(
-            fieldno: 1,
-            month: key,
-            water: value,
-          ),
-        );
+    if(ff==1){
+      DatabaseReference nodeRef = databaseRef.child("$ec/field1/Monthly");
+      nodeRef.onValue.listen((event) {
+        monthlydata.clear();
+        Map<dynamic, dynamic>? values =
+        event.snapshot.value as Map<dynamic, dynamic>?;
+        values?.forEach((key, value) {
+          monthlydata.add(
+            ExampleItem(
+              fieldno: 1,
+              month: key,
+              water: value,
+            ),
+          );
+        });
+        setState(() {
+          displayedData = monthlydata;
+        });// update the UI with the fetched data
+      }, onError: (error) {
+        print('Failed to fetch data: $error');
       });
-      // update the UI with the fetched data
-    }, onError: (error) {
-      print('Failed to fetch data: $error');
-    });
+    }else if(ff==2)
+      {
 
-    DatabaseReference nodeRef3 = databaseRef.child("$ec/field2/Monthly");
-    nodeRef3.onValue.listen((event) {
-      Map<dynamic, dynamic>? values =
-      event.snapshot.value as Map<dynamic, dynamic>?;
-      values?.forEach((key, value) {
-        monthlydata.add(
-          ExampleItem(
-            fieldno: 2,
-            month: key,
-            water: value,
-          ),
-        );
-      });
-      setState(() {
-        displayedData = monthlydata;
-      });
-      // update the UI with the fetched data
-    }, onError: (error) {
-      print('Failed to fetch data: $error');
-    });
+        DatabaseReference nodeRef3 = databaseRef.child("$ec/field2/Monthly");
+        nodeRef3.onValue.listen((event) {
+          Map<dynamic, dynamic>? values =
+          event.snapshot.value as Map<dynamic, dynamic>?;
+          values?.forEach((key, value) {
+            monthlydata.add(
+              ExampleItem(
+                fieldno: 2,
+                month: key,
+                water: value,
+              ),
+            );
+          });
+          setState(() {
+            displayedData = monthlydata;
+          });
+          // update the UI with the fetched data
+        }, onError: (error) {
+          print('Failed to fetch data: $error');
+        });
+
+      }
+
+
+
+
   }
 
   Future<Uint8List> generatePdf(List<ExampleItem> data) async {
@@ -95,7 +109,7 @@ class _irrigationhState extends State<irrigationh> {
 
   Future<void> savePdf(Uint8List pdfBytes) async {
     final directory = await getExternalStorageDirectory();
-    final file = File('${directory!.path}/irrigation_history.pdf');
+    final file = File('/storage/emulated/0/Download/irrigation_history.pdf');
     await file.writeAsBytes(pdfBytes);
     print('PDF saved to ${file.path}');
   }
@@ -162,7 +176,7 @@ class _irrigationhState extends State<irrigationh> {
                 ],
                 columnSpacing: 30,
                 horizontalMargin: 60,
-                rowsPerPage: 8,
+                rowsPerPage: 12,
               ),
               ElevatedButton(
                 onPressed: () => generateAndSavePdf(displayedData),

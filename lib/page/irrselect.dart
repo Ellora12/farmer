@@ -71,7 +71,7 @@ class irrselect extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => irrigationh()),
+                                      builder: (context) => irrigationh(ff:1)),
                                 );
                               },
                               child: Container(
@@ -107,7 +107,7 @@ class irrselect extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => irrigationh()),
+                                      builder: (context) => irrigationh( ff:2)),
                                 );
                               },
                               child: Container(
