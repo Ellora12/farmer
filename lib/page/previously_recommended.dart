@@ -58,6 +58,7 @@ class _previouslyState extends State<previously> {
           'UREA': Urea
         });
       });
+      data.sort((a, b) => b['uni'].compareTo(a['uni']));
       setState(() {}); // update the UI with the fetched data
     }, onError: (error) {
       print('Failed to fetch data: $error');

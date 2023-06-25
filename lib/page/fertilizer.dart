@@ -60,7 +60,7 @@ class _fertilizerState extends State<fertilizer> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.0.118:5000/predict'),
+        Uri.parse('http://192.168.43.190:5000/predict'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'Crop_name': st,
@@ -157,7 +157,7 @@ class _fertilizerState extends State<fertilizer> {
                         fontWeight: FontWeight.w900,
                         color: Colors.blueGrey),
                   ),
-                  subtitle: Text("last used 01/08/2022"),
+                  subtitle: Text("last used 21/06/2023"),
                   trailing: Icon(Icons.label_important_outlined),
                   onTap: () {
                     Navigator.push(

@@ -108,7 +108,7 @@ class HomeState extends State<Gd> {
 
         // Both listeners have completed fetching data
         String dataString =
-            'Pump: $pumpValue\n\nSensor1: $sensor1Value\n\nPump: $pumpValue2\n\nSensor2: $sensor2Value\n\n';
+            'Pump: $pumpValue\n\nMoisture Value1: $sensor1Value\n\nPump: $pumpValue2\n\nMoisture Value2: $sensor2Value\n\n';
 
 
         if (showAlert) {

@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
@@ -21,6 +22,8 @@ class weather2 extends StatefulWidget {
 class _weatherState extends State<weather2> {
   bool isLoading = true;
   List<Map<String, String>> hourlyForecastData = [];
+  final databaseRef = FirebaseDatabase.instance.ref("Weather");
+  int i=0;
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _weatherState extends State<weather2> {
       document.getElementById('wt-hbh')?.getElementsByTagName('tbody')[0];
       final rows = table?.getElementsByTagName('tr');
       for (final row in rows!) {
+        i++;
         final columns = row.getElementsByTagName('td');
         final time = row.getElementsByTagName('th')[0].text.trim();
 
@@ -54,9 +58,24 @@ class _weatherState extends State<weather2> {
           'Chance': chance,
           'Amount': amount,
         };
+        if(i<12)
+          {
+            databaseRef.child(time).set({
+
+              'Temperature': temperature,
+              'Wind': wind,
+              'Humidity': humidity,
+              'Chance': chance,
+              'Amount': amount,
+            });
+          }
 
         hourlyForecastData.add(forecast);
       }
+
+
+
+
 
       setState(() {
         isLoading = false;
@@ -308,7 +327,7 @@ class _NormalScreenState extends State<NormalScreen> {
           children: [
             AnimatedContainer(
               duration: Duration(milliseconds: 600),
-              height: showdate ? res_height * 0.125 : res_height * 0.100,
+              height: showdate ? res_height * 0.115 : res_height * 0.100,
               width: double.infinity,
               decoration: const BoxDecoration(
                   color: Colors.white,
@@ -337,26 +356,22 @@ class _NormalScreenState extends State<NormalScreen> {
               right: 0,
               child: ClipRRect(
                 borderRadius:
-                BorderRadius.only(bottomLeft: Radius.circular(50)),
+                BorderRadius.only(bottomLeft: Radius.circular(30)),
                 child: Column(
                   children: [
                     AnimatedContainer(
                       width: 70,
-                      height: showdate ? 110 : 0,
+                      height: showdate ? 100 : 0,
                       color: Color(0xfff7446f),
                       duration: Duration(milliseconds: 400),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children:  [
                           Text(
-                            currentDate.substring(0, currentDate.length - 4),
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                            currentDate.substring(0, currentDate.length - 4)+dayOfWeek.substring(0,3),
+                            style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
-                          Text(dayOfWeek.substring(0,3),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold)),
+
                         ],
                       ),
                     )
