@@ -28,7 +28,7 @@ A new Flutter project.
 
 ### Dynamic Notification
 <img src="ios/Flutter/19.jpg" width="250" height="600">
-<img src="ios/Flutter/noti.jpg" width="250" height="600">
+<img src="ios/Flutter/noti.jpeg" width="250" height="600">
 
 ### Navbar
  <img src="ios/Flutter/7.jpg" width="250" height="600">
@@ -49,7 +49,7 @@ A new Flutter project.
  <img src="ios/Flutter/12.jpg" width="250" height="600">
 
 ### Previous Recommendation
-<img src="ios/Flutter/prev.jpg" width="250" height="600">
+<img src="ios/Flutter/prev.jpeg" width="250" height="600">
 
 ### Set Crop For The Fields
 <img src="ios/Flutter/15.jpg" width="250" height="600">
