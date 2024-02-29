@@ -12,27 +12,48 @@
 [./A4__IDP_HARDWARE_CODE.ino](./A4__IDP_HARDWARE_CODE.ino)
 
 
-## <p style="text-align: center;">App Pages</p>
+## App Pages
 
-<p style="text-align: center;">
 
-### Log In Signup page
-<img src="ios/Flutter/1.jpg" width="250" height="600"><br><br>
+## App Pages
 
-### Signup page
-<img src="ios/Flutter/2.jpg" width="250" height="600"><br><br>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
 
-### Account Verification page
-<img src="ios/Flutter/3.jpg" width="250" height="600"><br><br>
+  <div style="flex-basis: 30%; margin-bottom: 20px;">
+    <p style="text-align: center;">Log In Signup page</p>
+    <img src="ios/Flutter/1.jpg" width="100%" height="auto">
+  </div>
 
-### Log In page
-<img src="ios/Flutter/4.jpg" width="250" height="600"><br><br>
+  <div style="flex-basis: 30%; margin-bottom: 20px;">
+    <p style="text-align: center;">Signup page</p>
+    <img src="ios/Flutter/2.jpg" width="100%" height="auto">
+  </div>
 
-### Reset password page
-<img src="ios/Flutter/5.jpg" width="250" height="600"><br><br>
+  <div style="flex-basis: 30%; margin-bottom: 20px;">
+    <p style="text-align: center;">Account Verification page</p>
+    <img src="ios/Flutter/3.jpg" width="100%" height="auto">
+  </div>
 
-### Home Page
-<img src="ios/Flutter/6.jpg" width="250" height="600"><br><br>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+
+  <div style="flex-basis: 30%; margin-bottom: 20px;">
+    <p style="text-align: center;">Log In page</p>
+    <img src="ios/Flutter/4.jpg" width="100%" height="auto">
+  </div>
+
+  <div style="flex-basis: 30%; margin-bottom: 20px;">
+    <p style="text-align: center;">Reset password page</p>
+    <img src="ios/Flutter/5.jpg" width="100%" height="auto">
+  </div>
+
+  <div style="flex-basis: 30%; margin-bottom: 20px;">
+    <p style="text-align: center;">Home Page</p>
+    <img src="ios/Flutter/6.jpg" width="100%" height="auto">
+  </div>
+
+</div>
 
 ### Dynamic Notification
 <img src="ios/Flutter/19.jpg" width="250" height="600"><br><br>
@@ -65,12 +86,8 @@
 ### Set Required Info For That Field Or Update It
 <img src="ios/Flutter/16.jpg" width="250" height="600"><br><br>
 
-</p>
 
 
-### Set Required Info For That Field Or Update It
-<img src="ios/Flutter/16.jpg" width="250" height="600"><br><br>
 
-</center>
 
 
