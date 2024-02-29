@@ -19,41 +19,38 @@
 |-----------------------------|-----------------------------|--------------------------------|
 | ![Log In Signup page](ios/Flutter/1.jpg) | ![Signup page](ios/Flutter/2.jpg) | ![Account Verification page](ios/Flutter/3.jpg) |
 
+<br><br>
+
 | Log In page                 | Reset password page         | Home Page                     |
 |-----------------------------|-----------------------------|-------------------------------|
 | ![Log In page](ios/Flutter/4.jpg) | ![Reset password page](ios/Flutter/5.jpg) | ![Home Page](ios/Flutter/6.jpg) |
 
+<br><br>
 
-### Dynamic Notification
-<img src="ios/Flutter/19.jpg" width="250" height="600"><br><br>
-<img src="ios/Flutter/noti.jpeg" width="250" height="600"><br><br>
 
-### Navbar
-<img src="ios/Flutter/7.jpg" width="250" height="600"><br><br>
+| Dynamic Notification       | Navbar                      | Weather Forecast              |
+|----------------------------|-----------------------------|-------------------------------|
+| ![Dynamic Notification](ios/Flutter/19.jpg) | ![Navbar](ios/Flutter/7.jpg) | ![Weather Forecast](ios/Flutter/8.jpg) |
 
-### Weather Forecast
-<img src="ios/Flutter/8.jpg" width="250" height="600"><br><br>
+---
 
 ### Pointed Shops and Agricultural Office
-<img src="ios/Flutter/9.jpg" width="250" height="600"><br><br>
 
-### Irrigation History
-<img src="ios/Flutter/10.jpg" width="250" height="600"><br><br>
+| Pointed Shops and Agricultural Office | Irrigation History         | Fertilizer Recommendation Input |
+|---------------------------------------|-----------------------------|---------------------------------|
+| ![Pointed Shops and Agricultural Office](ios/Flutter/9.jpg) | ![Irrigation History](ios/Flutter/10.jpg) | ![Fertilizer Recommendation Input](ios/Flutter/11.jpg) |
 
-### Fertilizer Recommendation Input
-<img src="ios/Flutter/11.jpg" width="250" height="600"><br><br>
+<br><br>
 
-### Recommended Fertilizers
-<img src="ios/Flutter/12.jpg" width="250" height="600"><br><br>
+| Recommended Fertilizers    | Previous Recommendation    | Set Crop For The Fields        |
+|----------------------------|-----------------------------|-------------------------------|
+| ![Recommended Fertilizers](ios/Flutter/12.jpg) | ![Previous Recommendation](ios/Flutter/prev.jpeg) | ![Set Crop For The Fields](ios/Flutter/15.jpg) |
 
-### Previous Recommendation
-<img src="ios/Flutter/prev.jpeg" width="250" height="600"><br><br>
+<br><br>
 
-### Set Crop For The Fields
-<img src="ios/Flutter/15.jpg" width="250" height="600"><br><br>
-
-### Set Required Info For That Field Or Update It
-<img src="ios/Flutter/16.jpg" width="250" height="600"><br><br>
+| Set Required Info For That Field Or Update It |
+|----------------------------------------------|
+| ![Set Required Info For That Field Or Update It](ios/Flutter/16.jpg) |
 
 
 
