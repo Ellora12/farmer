@@ -7,6 +7,9 @@ A new Flutter project.
 ## ARCHITECTURE
 <img src="ios/Flutter/architect.jpg" width="1000" height="600">
 
+## Esp 32 Code For Irrigation Control
+./A4__IDP_HARDWARE_CODE.ino
+
 ## App Pages
 ### Log In Signup page
 <img src="ios/Flutter/1.jpg" width="250" height="600">
