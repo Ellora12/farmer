@@ -12,10 +12,10 @@
 [./A4__IDP_HARDWARE_CODE.ino](./A4__IDP_HARDWARE_CODE.ino)
 
 
-## App Pages
+## <p style="text-align: center;">App Pages</p>
 
-<center>
-  
+<p style="text-align: center;">
+
 ### Log In Signup page
 <img src="ios/Flutter/1.jpg" width="250" height="600"><br><br>
 
@@ -61,6 +61,12 @@
 
 ### Set Crop For The Fields
 <img src="ios/Flutter/15.jpg" width="250" height="600"><br><br>
+
+### Set Required Info For That Field Or Update It
+<img src="ios/Flutter/16.jpg" width="250" height="600"><br><br>
+
+</p>
+
 
 ### Set Required Info For That Field Or Update It
 <img src="ios/Flutter/16.jpg" width="250" height="600"><br><br>
