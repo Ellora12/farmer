@@ -4,8 +4,10 @@ A new Flutter project.
 
 ## Getting Started
 # Images
-###ARCHITECTURE
+### ARCHITECTURE
 <img src="ios/Flutter/architect.jpg" width="1000" height="600">
+
+### App Pages
 1. <img src="ios/Flutter/1.jpg" width="250" height="600">
 2. <img src="ios/Flutter/2.jpg" width="250" height="600">
 3. <img src="ios/Flutter/3.jpg" width="250" height="600">
