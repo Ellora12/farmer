@@ -1,10 +1,9 @@
-# farmer
+# GreenAssist: IOT-based Cultivation Assistive System
 
 # Youtube Demonstration
 [![Video Demonstration](https://img.youtube.com/vi/JgJJKxg5NOk/maxresdefault.jpg)](https://www.youtube.com/watch?v=JgJJKxg5NOk)
 
-## Getting Started
-# Images
+
 ## ARCHITECTURE
 <img src="ios/Flutter/architect.jpg" width="1000" height="600">
 
