@@ -21,17 +21,17 @@
 
   <div style="flex-basis: 30%; margin-bottom: 20px;">
     <p style="text-align: center;">Log In Signup page</p>
-    <img src="ios/Flutter/1.jpg" width="100%" height="auto">
+    <img src="ios/Flutter/1.jpg" width="250" height="600">
   </div>
 
   <div style="flex-basis: 30%; margin-bottom: 20px;">
     <p style="text-align: center;">Signup page</p>
-    <img src="ios/Flutter/2.jpg" width="100%" height="auto">
+    <img src="ios/Flutter/2.jpg" width="250" height="600">
   </div>
 
   <div style="flex-basis: 30%; margin-bottom: 20px;">
     <p style="text-align: center;">Account Verification page</p>
-    <img src="ios/Flutter/3.jpg" width="100%" height="auto">
+    <img src="ios/Flutter/3.jpg" width="250" height="600">
   </div>
 
 </div>
@@ -40,17 +40,17 @@
 
   <div style="flex-basis: 30%; margin-bottom: 20px;">
     <p style="text-align: center;">Log In page</p>
-    <img src="ios/Flutter/4.jpg" width="100%" height="auto">
+    <img src="ios/Flutter/4.jpg" width="250" height="600">
   </div>
 
   <div style="flex-basis: 30%; margin-bottom: 20px;">
     <p style="text-align: center;">Reset password page</p>
-    <img src="ios/Flutter/5.jpg" width="100%" height="auto">
+    <img src="ios/Flutter/5.jpg" width="250" height="600">
   </div>
 
   <div style="flex-basis: 30%; margin-bottom: 20px;">
     <p style="text-align: center;">Home Page</p>
-    <img src="ios/Flutter/6.jpg" width="100%" height="auto">
+    <img src="ios/Flutter/6.jpg" width="250" height="600">
   </div>
 
 </div>
