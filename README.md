@@ -14,6 +14,8 @@
 
 ## App Pages
 
+<center>
+  
 ### Log In Signup page
 <img src="ios/Flutter/1.jpg" width="250" height="600"><br><br>
 
@@ -63,6 +65,6 @@
 ### Set Required Info For That Field Or Update It
 <img src="ios/Flutter/16.jpg" width="250" height="600"><br><br>
 
-
+</center>
 
 
