@@ -15,45 +15,14 @@
 ## App Pages
 
 
-## App Pages
+| Log In Signup page          | Signup page                 | Account Verification page      |
+|-----------------------------|-----------------------------|--------------------------------|
+| ![Log In Signup page](ios/Flutter/1.jpg) | ![Signup page](ios/Flutter/2.jpg) | ![Account Verification page](ios/Flutter/3.jpg) |
 
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+| Log In page                 | Reset password page         | Home Page                     |
+|-----------------------------|-----------------------------|-------------------------------|
+| ![Log In page](ios/Flutter/4.jpg) | ![Reset password page](ios/Flutter/5.jpg) | ![Home Page](ios/Flutter/6.jpg) |
 
-  <div style="flex-basis: 30%; margin-bottom: 20px;">
-    <p style="text-align: center;">Log In Signup page</p>
-    <img src="ios/Flutter/1.jpg" width="250" height="600">
-  </div>
-
-  <div style="flex-basis: 30%; margin-bottom: 20px;">
-    <p style="text-align: center;">Signup page</p>
-    <img src="ios/Flutter/2.jpg" width="250" height="600">
-  </div>
-
-  <div style="flex-basis: 30%; margin-bottom: 20px;">
-    <p style="text-align: center;">Account Verification page</p>
-    <img src="ios/Flutter/3.jpg" width="250" height="600">
-  </div>
-
-</div>
-
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-
-  <div style="flex-basis: 30%; margin-bottom: 20px;">
-    <p style="text-align: center;">Log In page</p>
-    <img src="ios/Flutter/4.jpg" width="250" height="600">
-  </div>
-
-  <div style="flex-basis: 30%; margin-bottom: 20px;">
-    <p style="text-align: center;">Reset password page</p>
-    <img src="ios/Flutter/5.jpg" width="250" height="600">
-  </div>
-
-  <div style="flex-basis: 30%; margin-bottom: 20px;">
-    <p style="text-align: center;">Home Page</p>
-    <img src="ios/Flutter/6.jpg" width="250" height="600">
-  </div>
-
-</div>
 
 ### Dynamic Notification
 <img src="ios/Flutter/19.jpg" width="250" height="600"><br><br>
